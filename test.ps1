@@ -19,7 +19,6 @@ function Set-PackageProperties($path, $output){
         $outPath = Join-Path $base $release
         $outFile = Join-Path $outPath $item.name
 
-        #出力フォルダの作成
         $parent = Split-Path $outFile -Parent
         if(test-path $parent){
         }else{
