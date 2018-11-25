@@ -1,5 +1,4 @@
-﻿#$sample = ".\sample.bas"
-$sample = ".\*\*.bas"
+﻿$sample = ".\sample.bas"
 
 function Get-FunlcList($file,$reg){
  
@@ -9,22 +8,16 @@ function Get-FunlcList($file,$reg){
     } 
     $wk = Get-Content -path $file -Encoding UTF8 -raw  
     $wk = $wk.replace("_`r`n","").replace("_`r","").replace("_`n","")
-    write-host $wk
-
-<#    
-    write-host "--------"
-    Select-String -path $file -Pattern "^function |^private function |^public function |^sub |^private sub |public sub" 
-#>
-    write-host "--------::"
-    #$regex=[regex]::new("^function |^private function |^public function |^sub |^private sub |public sub" )
-    #$regex= new-object  regex "^function.*$" ,"multiline"
-    $regex= new-object  regex "^function.*$" ,"multiline"
+    
+    #$regex = new-object  regex $reg ,("multiline","ignorecase")
+    $regex = new-object  regex $reg ,("multiline","ignorecase")
+    $regex.Replace($wk,".* "," ")
     $regex.Matches($wk)|ForEach{$_.value}
 
     write-host "--------"
 }
 
-Get-FunlcList $sample ""
+Get-FunlcList $sample "^(private|public) (function|sub).*$|^(function|sub).*$"
 
 #参考：
 #https://cheshire-wara.com/powershell/ps-help/select-string-help/
