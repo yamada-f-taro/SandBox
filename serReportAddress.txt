@@ -1,0 +1,50 @@
+Option Explicit
+
+'概要：テストです
+Sub test()
+    
+    Dim dic As Dictionary
+    Set dic = getDic(ThisWorkbook.Worksheets(2))
+
+    Call setAddress(ThisWorkbook.Worksheets(1), dic, ThisWorkbook.Worksheets(2))
+    
+End Sub
+
+'概要：srcの赤セルに書いてある文字がdestのテーブルにある場合、一致した行のC列に格納する。
+Sub setAddress(src As Worksheet, dic As Dictionary, dest As Worksheet)
+    Dim rng As Range
+    Set rng = src.UsedRange
+    
+    Dim jng As Range
+    For Each jng In rng.Rows
+        
+        Dim mng As Range
+        For Each mng In jng.Columns
+            
+            If mng.Cells(1, 1).Interior.Color <> vbWhite Then
+                Dim addr As String
+                addr = dic(mng.Cells(1, 1).Value)
+                dest.Range(addr).Value = Replace(mng.Cells(1, 1).Address, "$", "")
+            End If
+        Next
+    Next
+End Sub
+
+'概要：wsの"設定"というテーブルのA列をkeyに、addressをValueに格納する。
+Private Function getDic(ws As Worksheet)
+    Dim ret As New Dictionary
+    Dim idx As Long
+    
+    With ws.ListObjects("設定")
+        For idx = 1 To .ListRows.Count
+            With .ListRows(idx).Range
+                If Trim(.Cells(1, 1).Value) <> "" Then
+                    Call ret.add(.Cells(1, 1).Value, .Cells(1, 3).Address)
+                End If
+            End With
+        Next
+    End With
+    
+    Set getDic = ret
+    
+End Function
