@@ -1,0 +1,51 @@
+Option Explicit
+
+Private fso As New FileSystemObject
+
+Private Sub inportt()
+Dim dirr As String
+
+dirr = fso.BuildPath(ThisWorkbook.Path, "book1.xlsx")
+
+Workbooks.Open dirr
+
+
+
+End Sub
+
+
+Sub TEST1()
+        
+    '『TEST1』シートを新しいブックへコピーする
+    ThisWorkbook.Worksheets("TEST1").Copy
+    
+    '保存するブックの名前を作成
+    a = ThisWorkbook.Path & "\TEST1.xlsx"
+    
+    '新しく作成したブックを名前を付けて保存
+    ActiveWorkbook.SaveAs Filename:=a
+
+End Sub
+
+
+Private Sub test()
+
+Call saveSheet("テンプレ", "基本情報", "hoge.xlsx")
+
+
+End Sub
+
+Sub saveSheet(fsn As String, tsn As String, fn As String)
+
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Set wb = Workbooks.Add                     ''2.
+    ThisWorkbook.Sheets(fsn).Copy After:=wb.Sheets(Sheets.Count)    ''3.
+    
+    Application.DisplayAlerts = False
+    wb.Sheets("Sheet1").Delete
+    wb.SaveAs fso.BuildPath(ThisWorkbook.Path, fn)      ''5.
+    Application.DisplayAlerts = True
+    
+    wb.Close
+End Sub
