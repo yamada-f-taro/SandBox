@@ -1,5 +1,10 @@
 Option Explicit
 
+'参考：
+'https://tsukaeru-excel.com/vba-table
+'https://excel-excellent-technics.com/excel-table-getcolumnitem-10319
+
+
 Private fso As New FileSystemObject
 
 Private Sub inportt()
@@ -27,7 +32,6 @@ Sub TEST1()
 
 End Sub
 
-
 Private Sub test()
 
 Call saveSheet("テンプレ", "基本情報", "hoge.xlsx")
@@ -49,3 +53,40 @@ Sub saveSheet(fsn As String, tsn As String, fn As String)
     
     wb.Close
 End Sub
+
+Private Sub テーブルクリアTest()
+    
+    
+    Call テーブルクリア(ThisWorkbook.Worksheets("テンプレ").ListObjects("hogehoge"))
+
+
+End Sub
+
+
+'Set myTable = ThisWorkbook.Sheets("Sheet1").ListObjects("テーブル１")
+Private Sub テーブルクリア(myTable As ListObject)
+    If Not (myTable.DataBodyRange Is Nothing) Then
+        myTable.DataBodyRange.Delete
+    End If
+End Sub
+
+Private Sub 列名参照Test()
+
+列名参照 (ThisWorkbook.Worksheets("テンプレ").ListObjects("hogehoge"))
+
+End Sub
+
+Sub 列名参照(lo As ListObject)
+
+    Dim lc As ListColumn
+    Dim idx As Long
+    Set lc = lo.ListColumns("aaa")
+    
+'    Debug.Print lc.Range.Address
+    Debug.Print lc.DataBodyRange.Address
+
+'    lc.DataBodyRange.Rows
+
+End Sub
+
+
